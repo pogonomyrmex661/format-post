@@ -1,7 +1,29 @@
 import os
 import sys
 import re
-from argparse import ArgumentParser
+
+imagePath = "images"
+
+def ProcessImageTags(inFile):
+    # if we're here, our caller has read in a "<figure>" tag. Process untill we get to the
+    # matching "</figure>" tag
+    imagePath = ""
+    imageCaption = ""
+    readingCaption = False
+    
+    while line := inFile.readLine():
+        if (line.startsWith("</figure>")):
+            break
+        if (line.startsWith("<figcaption>")):
+            # if we're here, were looking for the text of the figure caption
+            while (line := inFile.readLine()):
+                if (line.startsWith("</figcaption>")):
+                    break
+                imageCaption = imageCaption + line.strip()
+        else:
+             
+
+
 
 in_filename = 'index.md'
 out_filename = 'test.md'
@@ -22,10 +44,12 @@ for line in in_file:
     print(line)
     out = ""
     if (handled_front_matter == False and not handling_front_matter and line == '---\n'):
+        # if we're here, we have not yet handled front matter, but have read the tag starting it
         handling_front_matter = True
         out_file.write(line)
     else:
         if (handling_front_matter):
+            # if we're here, we're currently processing the front matter contents.
             if (line == '---\n'):
                 # if we're here, we're closing the end matter tag
                 if (len(description) == 0):
@@ -47,7 +71,7 @@ for line in in_file:
                     out = line.replace("coverImage:", "")
                     out = out.replace("\"", "")
                     out = out.strip()
-                    out = "image: " + "images/" + out + "\n"
+                    out = "image: " + os.path.join(imagePath, out) + "\n"
                 if (line.startswith("categories:")):
                     out = line
                 if (line.startswith("tags:")):
@@ -63,6 +87,7 @@ for line in in_file:
                     out = line
                 out_file.write(out)
         else:
+            # if we're here, we are not processing front matter. Likely the body of the post.
             out_file.write(line)
         
     
