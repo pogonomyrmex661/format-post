@@ -4,31 +4,35 @@ import re
 
 imagePath = "images"
 
-def ProcessImageTags(inFile):
+def processImageTag(inFile):
     # if we're here, our caller has read in a "<figure>" tag. Process untill we get to the
     # matching "</figure>" tag
     imagePath = ""
     imageCaption = ""
     readingCaption = False
-    
-    while line := inFile.readLine():
-        if (line.startsWith("</figure>")):
+    line = ""
+    while (line := inFile.readline()):
+        if (line.startswith("</figure>")):
             break
-        if (line.startsWith("<figcaption>")):
+        if (line.startswith("<figcaption>")):
             # if we're here, were looking for the text of the figure caption
-            while (line := inFile.readLine()):
-                if (line.startsWith("</figcaption>")):
+            while (line := inFile.readline()):
+                if (line.startswith("</figcaption>")):
                     break
                 imageCaption = imageCaption + line.strip()
         else:
-             
-
-
+             if "])" in line and len(imagePath) == 0:
+                 imagePath = imagePath + line.split("])")[1].split(")\n")[0]
+    outText = "![picture](" + imagePath + ") \"picture\")\n"
+    if len(imageCaption) > 0:
+        outText = outText + "*" + imageCaption + "*"
+    outText = outText + "\n"
+    return outText
 
 in_filename = 'index.md'
 out_filename = 'test.md'
-print(sys.argv[1:])
-path = sys.argv[1];
+#print(sys.argv[1:])
+path = sys.argv[1]
 in_file_name = os.path.join(path, in_filename)
 out_file_name = os.path.join(path, out_filename )
 in_file = open(in_file_name, "r")
@@ -88,7 +92,11 @@ for line in in_file:
                 out_file.write(out)
         else:
             # if we're here, we are not processing front matter. Likely the body of the post.
-            out_file.write(line)
+            if (line.startswith("<figure>")):
+                imageTag = processImageTag(in_file)
+                out_file.write(imageTag)
+            else:
+                out_file.write(line)
         
     
 in_file.close()
