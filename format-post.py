@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 from argparse import ArgumentParser
 
 in_filename = 'index.md'
@@ -26,6 +27,9 @@ for line in in_file:
     else:
         if (handling_front_matter):
             if (line == '---\n'):
+                # if we're here, we're closing the end matter tag
+                if (len(description) == 0):
+                    out_file.write("description: \n")
                 out_file.write(line)
                 handled_front_matter = True
                 handling_front_matter = False
@@ -59,11 +63,11 @@ for line in in_file:
                     out = line
                 out_file.write(out)
         else:
-
             out_file.write(line)
         
     
 in_file.close()
 out_file.close()
-newfilename = postdate + "-" + title + ".md"
+title = re.sub(r'[^\w\s]', '', title)
+newfilename = postdate + "-" + title.replace("'", "") + ".md"
 os.rename (os.path.join(path, out_filename), os.path.join(path, newfilename))
