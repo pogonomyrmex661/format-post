@@ -1,0 +1,6 @@
+for i in ./target/*
+do
+    echo $i
+    python3 ./format-post.py "$i"
+done
+

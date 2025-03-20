@@ -80,8 +80,6 @@ def processFrontMatter(inFile):
                     break
             currentText = currentText + "]\n"
             outText = outText + currentText
-        #if (line.startswith("title:")):
-         #   outText = outText + line.replace("\"", "" )
         if (line.startswith("date:")):
             postdate = line.replace("date:", "")
             postdate = postdate.replace("\"", "")
@@ -95,7 +93,7 @@ def processFrontMatter(inFile):
             currentText = "image: " + os.path.join(imagePath, out) + currentText + "\n"
             outText = outText + currentText
         if (line.startswith("title:")):
-            outText = outText + "title:"
+            outText = outText + "title: "
             title = line.replace("\"", "")
             title = title.replace("title:", "")
             title = title.strip()
@@ -110,7 +108,6 @@ def processFrontMatter(inFile):
     newfilename = re.sub(r'[^\w\s]', '', title)
     newfilename = "-" + newfilename.replace("'", "")
     newfilename = postdate + newfilename + ".md"
-    #globals()[newfilename] = newfilename
     outText = outText + "---\n"
     return outText
 
