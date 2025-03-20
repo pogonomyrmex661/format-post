@@ -25,7 +25,7 @@ def processImageTag(inFile):
                  startidx = line.find("](")
                  stopidx = line.find(")", startidx)
                  imagePath = line[startidx + 2:stopidx]
-    outText = "![picture](" + imagePath + ") \"picture\")\n"
+    outText = "![picture](" + imagePath + ")\n"
     if len(imageCaption) > 0:
         outText = outText + "*" + imageCaption + "*"
     outText = outText + "\n"
