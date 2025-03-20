@@ -78,8 +78,10 @@ def processFrontMatter(inFile):
                         currentText = currentText + temp
                 else:
                     break
-        if (line.startswith("title:")):
-            outText = outText + line.replace("\"", "" )
+            currentText = currentText + "]\n"
+            outText = outText + currentText
+        #if (line.startswith("title:")):
+         #   outText = outText + line.replace("\"", "" )
         if (line.startswith("date:")):
             postdate = line.replace("date:", "")
             postdate = postdate.replace("\"", "")
@@ -90,12 +92,12 @@ def processFrontMatter(inFile):
             currentText = line.replace("coverImage:", "")
             currentText = currentText.replace("\"", "")
             currentText = currentText.strip()
-            outText = outText + "image: " + os.path.join(imagePath, out) + currentText + "\n"
-            currentText = currentText + "]\n"
+            currentText = "image: " + os.path.join(imagePath, out) + currentText + "\n"
             outText = outText + currentText
         if (line.startswith("title:")):
-            title = line.replace("title:", "")
-            title = title.replace("\"", "")
+            outText = outText + "title:"
+            title = line.replace("\"", "")
+            title = title.replace("title:", "")
             title = title.strip()
             outText = outText + title + "\n"
         if (line.startswith("description:")):
