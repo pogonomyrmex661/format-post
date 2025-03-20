@@ -44,6 +44,40 @@ def processFrontMatter(inFile):
         if (line.startswith("---\n")):
             # if we're here - found end of front matter tag. We're done.
             break
+        if (line.startswith("categories:")):
+            currentText = "categories: ["
+            categorycount = 0
+            while (line := inFile.readline()):
+                temp = line.strip()
+                if temp.startswith("-"):
+                    temp = temp.replace("-", "")
+                    temp = temp.replace("\"", "")
+                    temp = temp.strip()
+                    if (len(temp) > 0):
+                        if (categorycount > 0):
+                            currentText = currentText + ", "
+                        categorycount = categorycount + 1
+                        currentText = currentText + temp
+                else:
+                    break
+            currentText = currentText + "]\n"
+            outText = outText + currentText
+        if (line.startswith("tags:")):
+            currentText = "tags: ["
+            tagcount = 0
+            while (line := inFile.readline()):
+                temp = line.strip()
+                if temp.startswith("-"):
+                    temp = temp.replace("-", "")
+                    temp = temp.replace("\"", "")
+                    temp = temp.strip()
+                    if (len(temp) > 0):
+                        if (tagcount > 0):
+                            currentText = currentText + ", "
+                        tagcount = tagcount + 1
+                        currentText = currentText + temp
+                else:
+                    break
         if (line.startswith("title:")):
             outText = outText + line.replace("\"", "" )
         if (line.startswith("date:")):
@@ -57,10 +91,8 @@ def processFrontMatter(inFile):
             currentText = currentText.replace("\"", "")
             currentText = currentText.strip()
             outText = outText + "image: " + os.path.join(imagePath, out) + currentText + "\n"
-        if (line.startswith("categories:")):
-            outText = outText + line
-        if (line.startswith("tags:")):
-            outText = outText + line
+            currentText = currentText + "]\n"
+            outText = outText + currentText
         if (line.startswith("title:")):
             title = line.replace("title:", "")
             title = title.replace("\"", "")
