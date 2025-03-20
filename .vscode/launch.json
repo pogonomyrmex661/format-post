@@ -13,7 +13,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             //"args": "${command:pickArgs}"
-            "args": ["2021-12-31-new-year"]
+            "args": ["2024-04-26-mating-short-horned-lizards-in-southwestern-colorado"]
         }
     ]
 }
