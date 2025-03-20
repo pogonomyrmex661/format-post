@@ -22,7 +22,9 @@ def processImageTag(inFile):
                 imageCaption = imageCaption + line.strip()
         else:
              if "](" in line and len(imagePath) == 0:
-                 imagePath = imagePath + line.split("]()")[0].split(")\n")[0]
+                 startidx = line.find("](")
+                 stopidx = line.find(")", startidx)
+                 imagePath = line[startidx + 2:stopidx]
     outText = "![picture](" + imagePath + ") \"picture\")\n"
     if len(imageCaption) > 0:
         outText = outText + "*" + imageCaption + "*"
