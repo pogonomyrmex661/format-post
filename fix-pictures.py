@@ -2,12 +2,12 @@ import os
 import sys
 import re
 
-imagePath = "images"
-postdate = "" 
-title = ""
+#imagePath = "images"
+#postdate = "" 
+#title = ""
 newfilename = ""
 
-in_filename = '2021-08-01-San Juan Mountain Mushrooms.md'
+in_filename = '2019-08-12-The Stomping Grounds.md'
 out_filename = 'test.md'
 path = sys.argv[1]
 firstimage = ""
@@ -32,11 +32,13 @@ for i in range(len(textList)):
         line = line[startidx:]
         startidx = line.find(") ")
         imgstring = line[:startidx + 1]
+        idx = imgstring.find("](http")
+        if (idx > 0):
+            imgstring = imgstring[:idx]
         if firstImage:
             idx = imgstring.find("](")
             temp = imgstring[idx+2:]
-
-            if len(temp) == temp.rfind(")"):
+            if temp.rfind(")") > 0:
                 temp = temp[:-1]
             textList[imageIdx]  =  "image: "  + temp +"\n"
             firstImage = False
@@ -45,9 +47,12 @@ for i in range(len(textList)):
         captionstring = captionstring[:startidx] 
         captionstring = "*" + captionstring + "*"
         textList[i] = imgstring + " " + captionstring + "\n"
+    textList[i] = textList[i].replace("http:", "https:")
 
 out_file.writelines(textList)
         
 in_file.close()
 out_file.close()
-#os.rename (os.path.join(path, out_filename), os.path.join(path, newfilename))
+new_in_filename = in_filename + ".bak"
+#os.rename(os.path.join(path, in_filename), os.path.join(path, new_in_filename))
+#os.rename (os.path.join(path, out_filename), os.path.join(path, in_filename))
