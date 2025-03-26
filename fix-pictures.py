@@ -7,7 +7,7 @@ import re
 #title = ""
 newfilename = ""
 
-in_filename = '2019-08-12-The Stomping Grounds.md'
+in_filename = '2019-01-13-Clarks Nutcracker.md'
 out_filename = 'test.md'
 path = sys.argv[1]
 firstimage = ""
@@ -26,6 +26,8 @@ for i in range(len(textList)):
     out = ""
     if line.startswith("image:"):
         imageIdx = i
+    if line.strip().startswith("categories: [") or line.strip().startswith("category: ") or line.strip().startswith("category: "):
+        textList[i] = "categories: [post]\n"
         
     if (line.startswith("\[caption id=")):
         startidx = line.find("![")
@@ -53,6 +55,7 @@ out_file.writelines(textList)
         
 in_file.close()
 out_file.close()
-new_in_filename = in_filename + ".bak"
+print("Finished!")
+#new_in_filename = in_filename + ".bak"
 #os.rename(os.path.join(path, in_filename), os.path.join(path, new_in_filename))
 #os.rename (os.path.join(path, out_filename), os.path.join(path, in_filename))
