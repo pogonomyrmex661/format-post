@@ -7,7 +7,7 @@ import re
 #title = ""
 newfilename = ""
 
-in_filename = '2019-01-13-Clarks Nutcracker.md'
+in_filename = '2021-02-24-Acromyrmex versicolor Leafcutter Ants and Asagena Steatoda Spider.md'
 out_filename = 'test.md'
 path = sys.argv[1]
 firstimage = ""
